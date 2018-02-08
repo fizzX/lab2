@@ -114,10 +114,15 @@ Reimplement max_list, but this time, it should return an int option
 instead of an int.
 ......................................................................*)
 
-let rec max_list (lst : int option list) : int option =
+let max_list (lst : int list) : int option =
+  let rec find_max (lst: int list) : int =
+    match lst with
+    | [] -> 0
+    | [elt] -> elt
+    | head :: tail -> max head (find_max tail) in
   match lst with
-  | [elt] -> Some elt
-  | head :: tail -> Some (max head (max_list tail)) ;;
+  | [] -> None
+  | _ -> Some (find_max lst);;
 
 (*......................................................................
 Exercise 5: Write a function to return the smaller of two int options,
@@ -127,7 +132,13 @@ useful.
 ......................................................................*)
 
 let min_option (x : int option) (y : int option) : int option =
-  failwith "min_option not implemented" ;;
+  if x = None
+    then if y = None
+      then None
+    else y
+  else if y = None
+    then x
+  else min x y;;
 
 (*......................................................................
 Exercise 6: Write a function to return the larger of two int options, or
@@ -136,7 +147,13 @@ other.
 ......................................................................*)
 
 let max_option (x : int option) (y : int option) : int option =
-  failwith "max_option not implemented" ;;
+  if x = None
+    then if y = None
+      then None
+    else y
+  else if y = None
+    then x
+  else max x y;;
 
 (*======================================================================
 Part 3: Polymorphism practice
